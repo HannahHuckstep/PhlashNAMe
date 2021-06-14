@@ -1,0 +1,124 @@
+---
+title: "R Notebook"
+output:
+  html_document:
+    df_print: paged
+---
+
+
+Loading Data 
+```{r}
+library(ggplot2)
+dn <- "~/Documents/neo4j/PhlashyName/liveDemo/"
+
+# Proteins
+allMap <- read.csv(paste0(dn, "qPhosAllMappings.tsv"), header = TRUE,sep = '\t')
+
+allMap$peptideProp <- allMap$PepsMappedfromData / (allMap$PepsMappedfromData + allMap$PeptidesNotMappedFromData)
+allMap$UIDProp <- allMap$UIDsMappedFromData / (allMap$UIDsMappedFromData + allMap$UIDSNotMappedFromData)
+allMap$mappedPhosnsProp <- allMap$PhosnsMappedTo / (allMap$PhosnsMappedTo + allMap$PhosnsNotMappedTo)
+allMap$mappedPfProp <- allMap$ProteoformsMappedTo / (allMap$ProteoformsMappedTo + allMap$ProteoformsNotMappedTo)
+allMap$mappedCplxProp <- allMap$ComplexesMappedTo / (allMap$ComplexesMappedTo + allMap$ComplexesNotMappedTo)
+allMap$mappedIntProp <- allMap$IntegratedMapped / (allMap$IntegratedMapped + allMap$IntegratedNotMapped)
+
+thisMap <- read.csv(paste0(dn, "R_Mapping_input.tsv"), header = TRUE,sep = '\t')
+```
+Plotting proportions 
+```{r}
+counter <- array(1:length(thisMap$Experiment))
+
+
+for(val in counter){
+  
+  print(paste("Experiment ",thisMap$Experiment[val]))
+  pepProp <- (thisMap$pepMap[val]) / (thisMap$pepMap[val] + thisMap$pepNotMap[val])
+  UIDsProp <- (thisMap$UIDMap[val]) / (thisMap$UIDMap[val] + thisMap$UIDnotMap[val])
+  phosProp <- (thisMap$phosdTo[val]) / (thisMap$phosdTo[val] + thisMap$notPhosdTo[val])
+  pfProp <- (thisMap$pfTo[val]) / (thisMap$pfTo[val] + thisMap$notPFTo[val])
+  cplxProp <- (thisMap$cplxTo[val]) / (thisMap$cplxTo[val] + thisMap$notCplxTo[val])
+  intProp <- (thisMap$intTo[val]) / (thisMap$intTo[val] + thisMap$notIntTo[val])
+  
+
+# Histogram overlaid with kernel density curve
+a <- ggplot(allMap, aes(x=peptideProp)) + 
+  geom_histogram(bins = 50,
+                 colour="black", fill="white") +
+  geom_density(alpha=.2, fill="cornflowerblue")+  # Overlay with transparent density plot
+  theme_bw()+
+  theme(panel.border = element_blank())+
+  xlab("Peptide Proportions")+
+  ylab("Frequency")+
+  geom_vline( aes(xintercept = pepProp), colour="coral3", size = 1) + 
+  ggtitle(paste(thisMap$Experiment[val], "\nFreq of the proportion of peptides mapped from data"))
+print(a)
+
+# Histogram overlaid with kernel density curve
+b <- ggplot(allMap, aes(x=UIDProp)) + 
+  geom_histogram(bins = 50,
+                 colour="black", fill="white") +
+  geom_density(alpha=.2, fill="cornflowerblue")+  # Overlay with transparent density plot
+  theme_bw()+
+  theme(panel.border = element_blank())+
+  xlab("UniProt id Proportions")+
+  ylab("Frequency")+
+  geom_vline( aes(xintercept = UIDsProp), colour="coral3", size = 1) + 
+  ggtitle(paste(thisMap$Experiment[val], "\nFreq of the proportion of UniProt IDs mapped from data"))
+print(b)
+
+# Histogram overlaid with kernel density curve
+c <- ggplot(allMap, aes(x=mappedPhosnsProp)) + 
+  geom_histogram(bins = 50,
+                 colour="black", fill="white") +
+  geom_density(alpha=.2, fill="cornflowerblue")+  # Overlay with transparent density plot
+  theme_bw()+
+  theme(panel.border = element_blank())+
+  xlab("Mapped Phosphorylation Proportions")+
+  ylab("Frequency")+
+  geom_vline( aes(xintercept = phosProp), colour="coral3", size = 1) + 
+  ggtitle(paste(thisMap$Experiment[val], "\nFreq of the proportion of phosphorylations in the network with mapped data"))
+print(c)
+
+# Histogram overlaid with kernel density curve
+d<-ggplot(allMap, aes(x=mappedPfProp)) + 
+  geom_histogram(bins = 50,
+                 colour="black", fill="white") +
+  geom_density(alpha=.2, fill="cornflowerblue")+  # Overlay with transparent density plot
+  theme_bw()+
+  theme(panel.border = element_blank())+
+  xlab("Mapped Proteoform Proportions")+
+  ylab("Frequency")+
+  geom_vline( aes(xintercept = pfProp), colour="coral3", size = 1) + 
+  ggtitle(paste(thisMap$Experiment[val], "\nFreq of the proportion of proteoforms in the network with mapped data"))
+print(d)
+
+# Histogram overlaid with kernel density curve
+e <- ggplot(allMap, aes(x=mappedCplxProp)) + 
+  geom_histogram(bins = 50,
+                 colour="black", fill="white") +
+  geom_density(alpha=.2, fill="cornflowerblue")+  # Overlay with transparent density plot
+  theme_bw()+
+  theme(panel.border = element_blank())+
+  xlab("Mapped Complex Node Proportions")+
+  ylab("Frequency")+
+  geom_vline( aes(xintercept = cplxProp), colour="coral3", size = 1) + 
+  ggtitle(paste(thisMap$Experiment[val], "\nFreq of the proportion of complexes in the network with mapped data"))
+print(e)
+
+# Histogram overlaid with kernel density curve
+f<-ggplot(allMap, aes(x=mappedIntProp)) + 
+  geom_histogram(bins = 50,
+                 colour="black", fill="white") +
+  geom_density(alpha=.2, fill="cornflowerblue")+  # Overlay with transparent density plot
+  theme_bw()+
+  theme(panel.border = element_blank())+
+  xlab("Mapped Integrated Node Proportions")+
+  ylab("Frequency")+
+  geom_vline( aes(xintercept = intProp), colour="coral3", size = 1) + 
+  ggtitle(paste(thisMap$Experiment[val], "\nFreq of the proportion of integrated nodes in the network with mapped data"))
+print(f)
+}
+
+```
+
+
+

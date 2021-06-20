@@ -269,6 +269,7 @@ If you're only interested in the downstream network of a specific node, it is al
 ### Neighbourhood Analysis
 
 With this function we can prioritize neighbourhoods of signalling. In order to prioritize important neighbourhoods, the Empirical False Discovery rate was determined for each mapped neighbourhood. Pre-calculated distributions have been calculated for each neighbourhood of varying sizes in which you can compare your mapped data to. As explained above, qPhos is a database holding 554 different phosphoproteomic experiments accross 137 human cell lines. qPhos was sampled from used to ... ???? bootstrap ? something something.
+Can generate your own bkgd distributions with this func : ``` ``` be sure to use the same depth, and approximate experiment size. Also may want to use a super computer as the compute needed is very intensive. 
 
 Using the example data from earlier these are the function inputs: 
 ```

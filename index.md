@@ -275,7 +275,7 @@ We can look at the resulting report titled "TraversalReport_downstream_P15208.ts
 
 ![Screen Shot 2021-06-28 at 11 43 54 pm](https://user-images.githubusercontent.com/9949832/123647418-66a32400-d86b-11eb-916b-bd17407c62d0.png)
 
-We see here that this UniProt ID has multiple proteoforms attached to it. Each may be in a different cellular location or have a different profile of modifications. The there a number of statistics reported for the downstream network of each proteoform and are ordered from largest to smallest (in reference to downstream network size). The first line is the variable names that can refer to that particular proteoform, next is the number of nodes found downstream of this proteoform. This statistic includes biochemical reaction nodes, gene nodes etc., as well as nodes that are mappable (proteins and complexes). The remaining statistics are self explanitory. 
+We see here that this UniProt ID has multiple proteoforms attached to it. Each may be in a different cellular location or have a different profile of modifications. The there a number of statistics reported for the downstream network of each proteoform and are ordered from largest to smallest (in reference to downstream network size). The first line is the variable names that can refer to that particular proteoform, next is the number of nodes found downstream of this proteoform. This statistic includes biochemical reaction nodes, gene nodes etc., as well as nodes that are mappable (proteins and complexes). The remaining statistics are self explanitory. This traversal will traverse all edges excepting small molecule edges, so as to avoid an explosion of things downstream of a single small molecule (such as ATP). 
 
 We can look at the downstream networks in cytoscape by loading the file titled "P15208_downstream.tsv". Once this is loaded into cytoscape and attached to our already loaded measured network, we can filter the network to display the downstream networks of each proteoform. 
 
@@ -308,7 +308,7 @@ We can visualize relative statistics in R:
 
 With this function you can look for the shortest path in the network between 2 proteins of interest. 
 
-ShortestPath takes in a measured input database [-idb], an output path [-op], a starting node id [-sid], a ending node id [-eid], the experiment name of interest [-en], and the weight type to be traversed [-ew] (can be either "Abundance" (a) or "Support" (s)). Using the example data from earlier we can look at the shortest path between the protein X (UniProt ID X) and Y (UniProt ID Y):
+ShortestPath takes in a measured input database [-idb], an output path [-op], a starting node id [-sid], a ending node id [-eid], the experiment name of interest [-en], and the weight type to be traversed [-ew] (can be either "Abundance" (a) or "Support" (s)). This algorithm will traverse all edge types excepting small molecule and  Using the example data from earlier we can look at the shortest path between the protein X (UniProt ID X) and Y (UniProt ID Y):
 
 ```
 java -jar jars/ReactoSitePlus.jar -m ShortestPath -idb ./path/to/graph/ -op ./path/to/output/ -sid X -eid Y -en stim -ew a

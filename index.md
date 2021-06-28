@@ -32,6 +32,7 @@ When the confidence score is mapped, the abundance score is mapped simultaneousl
   * dplyr
   * viridis
   * ggExtra 
+  * devtools
 
 ## Setting up 
 
@@ -264,32 +265,35 @@ Now that the network has the data mapped to it, there are a number of ways to an
 
 With this function we can look at everything downstream or upstream of a protein of interest. 
 
-TraversalAnalysis, takes in a measured input database [-idb], an output path [-op], a UniProt ID or database ID to look downstream of [-p], the direction of the traversal [-dir], and the experiment name of interest [-en]. Using the example data from earlier these are the function inputs for an analysis looking downstream of protein X (UniProt ID): 
+TraversalAnalysis, takes in a measured input database [-idb], an output path [-op], a UniProt ID or database ID to look downstream of [-p], the direction of the traversal [-dir], and the experiment name of interest [-en]. Using the example data from earlier these are the function inputs for an analysis looking downstream of the mouse insulin receptor (INSR)(P15208): 
 
 ```
-java -jar jars/ReactoSitePlus.jar -m TraversalAnalysis -idb ./path/to/graph/ -op ./path/to/output/ -p UniProtID -dir downstream -en stim
+java -jar jars/ReactoSitePlus.jar -m TraversalAnalysis -idb ./path/to/graph/ -op ./path/to/output/ -p P15208 -dir downstream -en Control
 ```
 
-We can look at the resulting report titled "TraversalReport_downstream_P42227.tsv":
+We can look at the resulting report titled "TraversalReport_downstream_P15208.tsv":
 
-[screenshot]
+![Screen Shot 2021-06-28 at 11 43 54 pm](https://user-images.githubusercontent.com/9949832/123647418-66a32400-d86b-11eb-916b-bd17407c62d0.png)
 
 We see here that this UniProt ID has multiple proteoforms attached to it. Each may be in a different cellular location or have a different profile of modifications. The there a number of statistics reported for the downstream network of each proteoform and are ordered from largest to smallest (in reference to downstream network size). The first line is the variable names that can refer to that particular proteoform, next is the number of nodes found downstream of this proteoform. This statistic includes biochemical reaction nodes, gene nodes etc., as well as nodes that are mappable (proteins and complexes). The remaining statistics are self explanitory. 
 
-We can look at the downstream networks in cytoscape by loading the file titled "P42227_downstream.tsv":
+We can look at the downstream networks in cytoscape by loading the file titled "P15208_downstream.tsv". Once this is loaded into cytoscape and attached to our already loaded measured network, we can filter the network to display the downstream networks of each proteoform. 
 
-[screenshots]
+![Screen Shot 2021-06-29 at 1 42 07 am](https://user-images.githubusercontent.com/9949832/123665036-42e7da00-d87b-11eb-91eb-ef8cb452c1ea.png)
 
-Once this is downloaded into cytoscape we can filter the network to display the downstream networks of each proteoform. 
+Looking at the downstream network of INSR (node 55682) in Cytoscape we can start to investigate the differences in expression between experiments directly downstream of our protein of interest. 
 
-[screenshots]
 
-If you're only interested in the downstream network of a specific node, it is also possible to specify a node ID (any node type). 
+This function can also be performed on a particular node ID. This can be any node including reaction or a complex nodes. An example of this function is as follows: 
+
+```
+java -jar jars/ReactoSitePlus.jar -m TraversalAnalysis -idb ./path/to/graph/ -op ./path/to/output/ -p 55682 -dir downstream -en Control
+```
 
 ### Neighbourhood Analysis
 
 With this function we can prioritize neighbourhoods of signalling. In order to prioritize important neighbourhoods, the Empirical False Discovery rate was determined for each mapped neighbourhood. Pre-calculated distributions have been calculated for each neighbourhood of varying sizes in which you can compare your mapped data to. As explained above, qPhos is a database holding 554 different phosphoproteomic experiments accross 137 human cell lines. qPhos was sampled from used to ... ???? bootstrap ? something something.
-Can generate your own bkgd distributions with this func : ``` ``` be sure to use the same depth, and approximate experiment size. Also may want to use a super computer as the compute needed is very intensive. 
+Can generate your own bkgd distributions with this func : ``` ``` be sure to use the same depth, and approximate experiment size. Also may want to use a super computer as the compute needed is very intensive (get mem stats ~32 GB). 
 
 Using the example data from earlier these are the function inputs: 
 ```

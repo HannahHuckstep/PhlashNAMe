@@ -313,6 +313,7 @@ ShortestPath takes in a measured input database [-idb], an output path [-op], a 
 ```
 java -jar jars/ReactoSitePlus.jar -m ShortestPath -idb ./path/to/graph/ -op ./path/to/output/ -sid P15208 -eid 20006 -ew a
 ```
+**The function will never be able to find a path between 2 UniProt ID's (or UniProt ID nodes), only between UniProt ID's and node ID's** 
 
 We can look at the report titled "ShortestPath_P15208_to_20006.tsv":
 

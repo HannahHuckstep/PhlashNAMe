@@ -308,21 +308,21 @@ We can visualize relative statistics in R:
 
 With this function you can look for the shortest path in the network between 2 proteins of interest. 
 
-ShortestPath takes in a measured input database [-idb], an output path [-op], a starting node id [-sid], a ending node id [-eid], the experiment name of interest [-en], and the weight type to be traversed [-ew] (can be either "Abundance" (a) or "Support" (s)). This algorithm will traverse all edge types excepting small molecule and  Using the example data from earlier we can look at the shortest path between the protein X (UniProt ID X) and Y (UniProt ID Y):
+ShortestPath takes in a measured input database [-idb], an output path [-op], a starting node id [-sid], a ending node id [-eid], and the weight type to be traversed [-ew] (can be either "Abundance" (a) or "Support" (s)). This algorithm will traverse all edge types excepting edges to and from small molecules. Using the example data from earlier we can look at the shortest path between the Insr (P15208) and the Jun protein node seen in the traversal analysis screenshot (node ID 20006):
 
 ```
-java -jar jars/ReactoSitePlus.jar -m ShortestPath -idb ./path/to/graph/ -op ./path/to/output/ -sid X -eid Y -en stim -ew a
+java -jar jars/ReactoSitePlus.jar -m ShortestPath -idb ./path/to/graph/ -op ./path/to/output/ -sid P15208 -eid 20006 -ew a
 ```
 
-We can look at the report titled "ShortestPath_Q9R1E0_to_Q38HM4.tsv":
+We can look at the report titled "ShortestPath_P15208_to_20006.tsv":
 
-[screenshots]
+![Screen Shot 2021-06-29 at 9 24 34 pm](https://user-images.githubusercontent.com/9949832/123790193-62d1d900-d921-11eb-8914-bfa391ac60bf.png)
 
 This function will report the shortest path between the 2 nodes in every experiment currently mapped on your database. The first line determines if the end node is up- or downstream of the starting node. Next a number of statistics are given. Finally, the path is shown with each node id and the total path weight, followed by the same path but with node names and the weight of each edge beside the reaction nodes.  
 
-We can visualize in cytoscape by loading the file "Q9R1E0_to_Q38HM4_downstream.tsv	":
+We can visualize in cytoscape by loading the file "P15208_to_20006_downstream.tsv	":
 
-[screenshots]
+![Screen Shot 2021-06-29 at 9 26 36 pm](https://user-images.githubusercontent.com/9949832/123790331-87c64c00-d921-11eb-81e2-3e2f240a3667.png)
 
 ### Minimal Connection Network 
 

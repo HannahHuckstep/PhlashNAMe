@@ -7,9 +7,9 @@ output:
 
 
 Loading Data 
-```{r}
+```{r, echo=FALSE}
 library(ggplot2)
-dn <- "~/Documents/neo4j/PhlashyName/liveDemo/"
+dn <- "./"
 
 # Proteins
 allMap <- read.csv(paste0(dn, "qPhosAllMappings.tsv"), header = TRUE,sep = '\t')
@@ -24,7 +24,7 @@ allMap$mappedIntProp <- allMap$IntegratedMapped / (allMap$IntegratedMapped + all
 thisMap <- read.csv(paste0(dn, "R_Mapping_input.tsv"), header = TRUE,sep = '\t')
 ```
 Plotting proportions 
-```{r}
+```{r, echo=FALSE}
 counter <- array(1:length(thisMap$Experiment))
 
 

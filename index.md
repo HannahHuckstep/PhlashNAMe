@@ -363,13 +363,19 @@ To create an embedded integrated database, first download the latest OWL files f
     * **One key thing to remember is that the orgininal Reactome database that is input into this function is modified and becomes the integrated database.**
 
 ## Other Helpful Functions 
-* AmountWithLabel
-* PrintDatabase
-* WriteAllUIDs
-* WritePhos
-* GetSpecies
-* ResetScores
-* PrintAllProperties
-* qPhosED
+#### AmountWithLabel
+This function will print the number of things in the database with that label. For example: 
+'''
+java -jar ./path/to/jars/ReactoSitePlus.jar -m AmountWithLabel -idb ./path/to/Reactome/Graph/ -l Protein
+'''
+By putting in a label that doesnt exist, this function will also throw an error showing all of the labels available for the given database. 
+
+#### PrintDatabase
+#### WriteAllUIDs
+#### WritePhos
+#### GetSpecies
+#### ResetScores
+#### PrintAllProperties
+#### qPhosED
 
 

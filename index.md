@@ -327,13 +327,22 @@ We can visualize in cytoscape by loading the file "P15208_to_20006_downstream.ts
 
 ### Minimal Connection Network 
 
-With this function you can generate the network of all shortest paths between all nodes. 
+With this function you can generate the network of all shortest paths between all nodes (typically reffered to as the shortest-paths network). 
 
-Using the example data from earlier these are the function inputs: 
+Continuing with the example data the function inputs call would look something like this: 
 
-We can look at the report:
+```
+java -jar jars/ReactoSitePlus.jar -m MinimalConnectionNetwork -idb ./path/to/graph/ -op ./path/to/output/ -en Control
+```
 
-We can visualize in cytoscape: 
+The report gives general statistics about what is found in the network by looking at "MinimalConnectionNetworkReport_Control.tsv". 
+
+![Screen Shot 2021-06-30 at 7 14 01 pm](https://user-images.githubusercontent.com/9949832/123936119-3dec6d00-d9d8-11eb-88c1-8d0623747645.png)
+
+We can then visualize in cytoscape by loading the file "MinimalConnectionNetworkReport_Control_cytoscape.tsv"
+
+![Screen Shot 2021-06-30 at 7 20 16 pm](https://user-images.githubusercontent.com/9949832/123936327-6a07ee00-d9d8-11eb-8292-0a1d2db1ed32.png)
+
 
 ## Creating a new integrated Database 
 

@@ -170,6 +170,24 @@ git clone https://github.com/HannahHuckstep/Db_Compare.git
 4.  Data can then be analysed with using various functions described
     below with detailed examples.
 
+## Analysis modes
+
+PhlashyNAMe is a suite of tools that enable a network-based analysis of phosphoproteomic data. The analysis tools provided within PhlashyNAMe are:
+
+1. PrintDatabase - Description
+2. AmountWithLabel - Description
+3. WriteAllUIDs - Description
+4. WritePhos - Description
+5. WriteDBtoSIF - Description
+6. IntegratePSP - Description
+7. BinomialNeighbourhoodAnalysis - Description
+8. MapPeptides - Description
+9. CreateDB - Description
+10. NeighbourhoodAnalysis - Description
+11. ShortestPath - Description
+12. MinimalConnectionNetwork - Description
+13. TraversalAnalysis - Description
+
 ## Tool options and commands 
 To start, navigate into the repo directory and type the following command to view all of the tool options: 
 
@@ -190,10 +208,10 @@ For this option you will need to specify:
 
 Thus, the final command would look something like this: 
 ```
-java -jar ./path/to/jars/RactoSitePlus.jar -m CreateDB -iof ./path/to/file/Reactome.owl -op ./path/to/graph/ -u T -s h
+java -jar ./path/to/jars/ReactoSitePlus.jar -m CreateDB -iof ./path/to/file/Reactome.owl -op ./path/to/graph/ -u T -s h
 ```
 
-**All comands will start with** ```java -jar ./path/to/jars/RactoSitePlus.jar```
+**All comands will start with** ```java -jar ./path/to/jars/ReactoSitePlus.jar```
 
 Finally, below all the commands are all of the parameters required to run each command, and an explanation of that they are used for. e.g.,
 * --input_owl_file [INPUT_OWL_FILE], -iof [INPUT_OWL_FILE]
@@ -217,7 +235,7 @@ Which needs the following parameters specified:
 
 To map the data you can run the following command
 ``` 
-java -jar ./path/to/jars/RactoSitePlus.jar -m MapPeptides -idb ./path/to/graph/ -op ./path/to/output/ -idf ./path/to/data.txt -as HighestSupport
+java -jar ./path/to/jars/ReactoSitePlus.jar -m MapPeptides -idb ./path/to/graph/ -op ./path/to/output/ -idf ./path/to/data.txt -as HighestSupport
 ```
                          
 In order to map your data you will need an input file with the following 4 columns; 
@@ -308,7 +326,7 @@ SUPPORT_SCORE_ | The support score mapped from the data for a node. There may be
 
 To write the SIF and attribute files the java command requires the input database directory and the path to the direcory you'd like the output created in. The command is as follows: 
 ``` 
-java -jar ./path/to/jars/RactoSitePlus.jar -m WriteDBtoSIF -idb ./path/to/graph/ -op ./path/to/output/
+java -jar ./path/to/jars/ReactoSitePlus.jar -m WriteDBtoSIF -idb ./path/to/graph/ -op ./path/to/output/
 ```
 
 To then load the SIF file into cytoscape, first open the cytoscape application. Next click the network button (highlighted in red in the figure below).
@@ -463,7 +481,7 @@ To create an embedded integrated database, first download the latest OWL files f
     * Read and agree to terms and conditions 
     * Download 'BioPAX:Kinase-substrate information' 
 4. Create the Reactome embedded database as shown above 
-    * e.g.,  ```java -jar ./path/to/jars/RactoSitePlus.jar -m CreateDB -iof ./path/to/file/Reactome.owl -op ./path/to/graph/ -u T -s h```
+    * e.g.,  ```java -jar ./path/to/jars/ReactoSitePlus.jar -m CreateDB -iof ./path/to/file/Reactome.owl -op ./path/to/graph/ -u T -s h```
     * Remember to specify wheather or not you'd like the database to be updated and the species 
     * This function downloads many files live from UniProt. Therefore if internet access is unstable this function may crash. You can simply re-enter the command and it will overwrite the current failed output. 
 5. Once the Reactome graph is built, you can integrate with PhosphoSitePlus with the 'IntegratePSP' mode. 

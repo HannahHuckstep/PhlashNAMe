@@ -1,31 +1,136 @@
+---
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
 # PhlashyNAMe Tutorial
 
-## Introduction 
+## Introduction
 
-PhlashyNAMe is a command line tool for downstream analysis Proteomics and Phosphoproteomics data. The tool can be run on linux, Mac and Windows operating systems. What makes PhlashyNAMe unique is it's ability to use phospho-peptide level information to analyse your data. Reactome annotates proteins in specific phosphorylation states as separate entities, therefore these phosphoproteins can take part in different signalling cascades depending on their phosphorylation state. Proteins in these differing modification states are hereby referred to as proteoforms. Taking advantage of this structure, PhlashyNAMe takes an input file of phosphopeptides and maps the phosphorylations onto proteins and complexes according to a set of guidelines explained in detail in the figure below. It works by assigning a confidence score and an abundance score to each mapped protein and complex. 
-#### Confidence Score 
-This confidence score summarises support for a given phosphorylation state of a protein over its other phosphorylation states based on observations from the data. 
+PhlashyNAMe is a command line tool for downstream network-based analysis
+of Proteomics and Phosphoproteomics data. The tool can be run on linux,
+Mac and Windows operating systems. What makes PhlashyNAMe unique is it's
+ability to analyse your data at the phosphopeptide level thereby
+averting the need to manually map phosphopeptides to proteins.
 
-In Reactome, each modified protein is treated as a separate entity to the unmodified protein. In this document these entities are referred to as proteoforms, as they are different versions of the same protein and participate in different parts of the network accordingly. Proteoforms are highlighted in green throughout the  below figures.
+Reactome annotates proteins in specific phosphorylation states as
+separate entities, therefore these phosphoproteins can take part in
+different signalling cascades depending on their phosphorylation state.
+Proteins in these differing modification states are hereby referred to
+as *proteoforms*. Taking advantage of this structure, PhlashyNAMe takes
+an input file of phosphopeptides and maps the phosphorylations onto
+proteins and complexes according to a set of guidelines explained in
+detail in the figure below. It works by assigning a **confidence score**
+and an **abundance score** to each mapped protein and complex.
 
-![Reactome Proteoforms](https://user-images.githubusercontent.com/9949832/121049429-06383e00-c7fb-11eb-8a4d-e9677ad0a220.png)
+#### Confidence Score
 
+Phosphoproteomic data is error prone therefore PhlashyNAMe computes a
+confidence score to summarise the confidence we have in observing any
+given proteoform. PhlashyNAMe does so by combining evidence from the
+data with that from knowledge bases such as Reactome into a confidence
+score for each proteoform. This confidence score summarises support for
+a given phosphorylation state of a protein (proteoform) over its other
+phosphorylation states based on observations from the data.
 
-Across all proteoforms (green), all recorded phosphorylations are aggregated into one group called Points of Interest (orange) as shown in above. The phosphorylations recorded in the network in this example (PA,PB, and PC) are shown in purple while, phosphorylations found in the data (and not in the network) are shown in red. 
+> Proteoform - An entity in Reactome that represents the specific
+> modified state of a protein. A protein could have two proteoforms
+> representing its two phosphorylations states such as phosphorylation
+> at a specific position and the unphosphorylated state.
 
-![Support Score](https://user-images.githubusercontent.com/9949832/120878866-98292680-c602-11eb-9e33-aaf8e3549ee1.png)
+To better understand how these scores are computed, it is important to
+first understand the structure of Reactome. The figure below outlines
+how Reactome is organised and shows its representation in PhlashyNAMe.
 
-Looking at the rules developed to score each proteoform, we first score each peptide and take the average of the peptide scores to get the proteoform Confidence score. In rule 1 of the peptide score, a match means at the amino acid in the proteoform, and the peptide have the same status (both phosphorylated or both unphosphorylated). We give a score of 0.5 for a mismatch because that peptide supports the existence of that proteoform, but we know that peptide contains a P.O.I. and will support another proteoform better. Next, looking at Rule 2, we take the average of all possible matches. In Rule 3, we multiply by 0.9 to reflect that the database takes precedent over the data. However, we also reduce the weight of the score to reflect the extra unknown phosphorylation. Finally, in Rule 4, because a peptide mapping perfectly to a modified proteoform is uncommon and of interest we multiply the score by 1.5 to highlight the match. However, we do not highlight this if the proteoform is unmodified as perfect matches would be unmodified peptides (which mostly occur from unspecific binding). 
+![Reactome
+Proteoforms](https://user-images.githubusercontent.com/9949832/121049429-06383e00-c7fb-11eb-8a4d-e9677ad0a220.png)
 
+Across all proteoforms (green), all recorded phosphorylations are
+aggregated into one group called Points of Interest (orange with each
+point being the vertical grey line) as shown in the figure below. The
+phosphorylations recorded in the Reactome network (in this example
+p<sup>A</sup>, p<sup>B</sup>, and p<sup>C</sup>) are shown in purple
+while phosphorylations detected in the data (and not in the network) are
+shown in red.
 
-#### Abundance Score 
-Concurrently but separately, abundances (e.g., intensity, SILAC ratio, p-value, log fold change) are mapped onto all proteins and complexes across the network. The process of computing this score is illustrated in the figure below. The default abundance score mapping takes the abundance from the peptide with the highest confidence score (if there are multiple peptides with the same confidence score the average of the abundances are taken). The user can also choose to compute the mean or median abundance for each phosphopeptide mapped to a protein. 
+![Support
+Score](https://user-images.githubusercontent.com/9949832/120878866-98292680-c602-11eb-9e33-aaf8e3549ee1.png)
 
-![Abundance score](https://user-images.githubusercontent.com/9949832/120879240-5b126380-c605-11eb-8d3f-6b691f454cfd.png)
+The rules in the figure above are used to determine the confidence we
+have in the presence of each proteoform given the data we have observed.
+The rules begin by evaluating the confidence each peptide brings towards
+a given proteoform. For instance, when evaluating confidence in
+proteoform 1, we look through peptides 1-6 and score the confidence they
+bring towards the existence of proteoform 1. Peptide 1 has no
+phosporylation marks at the corresponding point of interest in
+proteoform 1 therefore based on rule 1, it gets a score of 1. Since it
+overlaps only one point of interest, the averaged score across points of
+interest is 1 based on rule 2. Despite being a perfect match, it does
+not get up-weighted through rule 4 because it is unmodified.
 
-When the confidence score is mapped, the abundance score is mapped simultaneously, although the scores remain separate. The user has 4 options for mapping the abundance score as described above. 
+Likewise, the score of peptide 4 towards proteoform 1 can be broken down
+as such:
 
-## Dependencies 
+1.  The peptide overlaps two points of interest with the first being a
+    match and the second being a mismatch thereby resulting in the
+    scores 1 and 0.5 respectively based on rule 1.
+
+2.  Based on rule 2, the score over phosphorylations in the database are
+    averaged therefore the score of this peptide is 0.75.
+
+3.  We observe a novel phosphorylation therefore based on rule 3, we
+    down-weight the score by multiplying it by 0.9 thus resulting in the
+    score of 0.675 for this peptide.
+
+The scores contributions from all peptides are then aggregated using the
+mean to produce the final confidence score for each proteoform.
+
+These rules have been logically derived to assist in the identification
+of high-confidence proteoforms. In rule 1 of the peptide score, a match
+means at the amino acid in the proteoform, and the peptide have the same
+status (both phosphorylated or both unphosphorylated). [We give a score
+of 0.5 for a mismatch because that peptide supports the existence of
+that proteoform, but we know that peptide contains a P.O.I. and will
+support another proteoform better]{.ul}. Next, looking at Rule 2, we
+take the average of all possible matches across points of interest to
+aggregate evidence from each individual point of interest. In Rule 3, we
+multiply the score by 0.9 to reflect that the database takes precedent
+over the data. However, we also reduce the weight of the score to
+reflect the extra unknown phosphorylation. Finally, in Rule 4, because a
+peptide mapping perfectly to a modified proteoform is uncommon and of
+interest we multiply the score by 1.5 to highlight the match. However,
+we do not highlight this if the proteoform is unmodified as perfect
+matches would be unmodified peptides (which mostly occur from unspecific
+binding).
+
+#### Abundance Score
+
+Concurrently but separately, abundances (e.g., intensity, SILAC ratio)
+or test statistics (e.g. log fold change) are mapped onto all proteins
+and complexes across the network. The process of computing this score is
+illustrated in the figure below. The default abundance score mapping
+takes the abundance from the peptide with the highest confidence score
+(if there are multiple peptides with the same confidence score the
+average of the abundances are taken). The user can also choose to
+compute the mean or median abundance for each phosphopeptide mapped to a
+proteoform.
+
+![Abundance
+score](https://user-images.githubusercontent.com/9949832/120879240-5b126380-c605-11eb-8d3f-6b691f454cfd.png)
+
+When the confidence score is mapped, the abundance score is mapped
+simultaneously, although the scores remain separate. The user has 4
+options for mapping the abundance score as described above.
+
+Combined, these scores provide a much better picture of the measurements
+allocated towards each proteoform. The workflow below demonstrates how
+these scores can be computed for a given data set and the additional
+benefit of interrogating the data using a network-based analytical
+framework.
+
+## Dependencies
+
 * Java 8
 * R
   * ggplot2 
@@ -34,14 +139,9 @@ When the confidence score is mapped, the abundance score is mapped simultaneousl
   * ggExtra 
   * devtools
 
-## Setting up 
-
-1. Clone this repo (as below) or create a new directory and place the provided scripts 
-
-```
-git clone https://github.com/HannahHuckstep/Db_Compare.git
-```
-2. If you do not have the required depndencies the following `conda` command will create an environment called `PhlashyNAMe` with all the dependencies installed. 
+If you do not have the required dependencies, the following `conda`
+command will create an environment called `PhlashyNAMe` with all the
+dependencies installed.
 
 ```
 conda create --name PhlashyNAMe \
@@ -56,11 +156,25 @@ conda create --name PhlashyNAMe \
   openjdk=8
 ```
 
-3. [OPTIONAL] download the most current version of Reactome and PhosphositePlus. There are currently pre-made integrated and non-integrated databases which can be found in the databases file in this repo for both human and mouse. 
+## Setting up
 
-4. Map your data as shown below 
+1.  Clone this repo (as below) or create a new directory and place the
+    provided scripts
 
-5. Data can then be analysed with useing the number of functions provided below with detailed examples. 
+```
+git clone https://github.com/HannahHuckstep/Db_Compare.git
+```
+
+2.  [OPTIONAL] download the most current version of Reactome and
+    PhosphositePlus. There are currently pre-made integrated and
+    non-integrated databases which can be found in the databases file in
+    this repo for both human and mouse.
+
+3.  Map your data as shown in the section [Mapping Phosphoproteomic
+    Data](#mapping-phosphoproteomic-data).
+
+4.  Data can then be analysed with using various functions described
+    below with detailed examples.
 
 ## Tool options and commands 
 To start, navigate into the repo directory and type the following command to view all of the tool options: 
@@ -377,5 +491,4 @@ By putting in a label that doesnt exist, this function will also throw an error 
 #### ResetScores
 #### PrintAllProperties
 #### qPhosED
-
 

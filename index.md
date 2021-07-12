@@ -39,7 +39,7 @@ When the confidence score is mapped, the abundance score is mapped simultaneousl
 1. Clone this repo (as below) or create a new directory and place the provided scripts 
 
 ```
-git clone https://github.com/HannahHuckstep/Db_Compare.git
+git@github.com:HannahHuckstep/PhlashyNAMe.git
 ```
 2. If you do not have the required depndencies the following `conda` command will create an environment called `PhlashyNAMe` with all the dependencies installed. 
 

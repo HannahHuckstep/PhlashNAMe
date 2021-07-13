@@ -220,11 +220,13 @@ Finally, below all the commands are all of the parameters required to run each c
 
 ## Mapping Phosphoproteomic Data 
 
-Now we should be ready to map our data! Data can be mapped to pre-built neo4j databases located in the databases folder, or you can build your own up-to-date database as shown above (and again with more detail below). To use the precomputed databases in the *databases* directory, you will need to first extract the tar archives. You can do so using:
+Now we should be ready to map our data! Data can be mapped to pre-built neo4j databases located in the databases folder, or you can build your own up-to-date database as shown above (see [Creating a new integrated Database](#creating-a-new-integrated-database)). The mapping process will modify the underlying graph database by computing and integrating confidence scores and abundance scores for each proteoform. To use the pre-computed databases in the *databases* directory, you will need to first extract the tar archives. You can do so using:
 
 ```
 tar zxf databases/mouse.tar.gz
 ```
+
+**Note that pre-computed databases need to be re-extracted for new analyses as the mapping step modifies the graph database.**
 
 In order to map your data you will need an input file with the following 4 columns; 
 1. A column where each cell contains a single UniProt ID corresponding to a peptide. *The name of the column cannot contain spaces*. 
@@ -387,17 +389,19 @@ Alternatively, you can do this process manually in the Neo4j desktop app as show
 ## Analysing Mapped Network 
 
 Now that the network has the data mapped to it, there are a number of ways to analyse the mapped network. 
-* Traversal analysis 
-* Neighbourhood analysis 
-* Find the shortest path between two proteins 
-* Minimal Connection Network
-* Manual investigation via cytosscape or Neo4j
+* Traversal analysis - Description
+* Neighbourhood analysis  - Description
+* Find the shortest path between two proteins - Description
+* Minimal Connection Network - Description
+* Manual investigation via Cytoscape or Neo4j - Description
 
 ### Traversal Analysis 
 
 With this function we can look at everything downstream or upstream of a protein of interest. 
 
-TraversalAnalysis, takes in a measured input database [-idb], an output path [-op], a UniProt ID or database ID to look downstream of [-p], the direction of the traversal [-dir], and the experiment name of interest [-en]. Using the example data from earlier these are the function inputs for an analysis looking downstream of the mouse insulin receptor (INSR)(P15208): 
+> "TraversalAnalysis"", takes in a **mapped** input database [-idb], an output path [-op], a UniProt ID or database ID to look downstream of [-p], the direction of the traversal [-dir], and the experiment name of interest [-en].
+
+Using the example data from earlier these are the function inputs for an analysis looking downstream of the mouse insulin receptor (*Insr*)(P15208): 
 
 ```
 java -jar jars/ReactoSitePlus.jar -m TraversalAnalysis -idb ./path/to/graph/ -op ./path/to/output/ -p P15208 -dir downstream -en Control
@@ -407,16 +411,15 @@ We can look at the resulting report titled "TraversalReport_downstream_P15208.ts
 
 ![Screen Shot 2021-06-28 at 11 43 54 pm](https://user-images.githubusercontent.com/9949832/123647418-66a32400-d86b-11eb-916b-bd17407c62d0.png)
 
-We see here that this UniProt ID has multiple proteoforms attached to it. Each may be in a different cellular location or have a different profile of modifications. The there a number of statistics reported for the downstream network of each proteoform and are ordered from largest to smallest (in reference to downstream network size). The first line is the variable names that can refer to that particular proteoform, next is the number of nodes found downstream of this proteoform. This statistic includes biochemical reaction nodes, gene nodes etc., as well as nodes that are mappable (proteins and complexes). The remaining statistics are self explanitory. This traversal will traverse all edges excepting small molecule edges, so as to avoid an explosion of things downstream of a single small molecule (such as ATP). 
+We see here that this UniProt ID has multiple proteoforms attached to it. Each may be in a different cellular location or have a different profile of modifications. The there a number of statistics reported for the downstream network of each proteoform and are ordered from largest to smallest (in reference to downstream network size). The first line is the variable names that can refer to that particular proteoform, next is the number of nodes found downstream of this proteoform. This statistic includes biochemical reaction nodes, gene nodes etc., as well as nodes that are mappable (proteins and complexes). The remaining statistics are self explanatory. This traversal will traverse all edges excepting small molecule edges, so as to avoid an explosion of things downstream of a single small molecule (for example ATP). 
 
-We can look at the downstream networks in Cytoscape by loading the file titled "P15208_downstream.tsv". Once this is loaded into Cytoscape and attached to our already loaded measured network, we can filter the network to display the downstream networks of each proteoform. 
+We can look at the downstream networks in Cytoscape by loading the file titled "P15208_downstream.tsv". Once this is loaded into Cytoscape and attached to our already loaded mapped network, we can filter the network to display the downstream networks of each proteoform. 
 
 ![Screen Shot 2021-06-29 at 1 42 07 am](https://user-images.githubusercontent.com/9949832/123665036-42e7da00-d87b-11eb-91eb-ef8cb452c1ea.png)
 
-Looking at the downstream network of INSR (node 55682) in Cytoscape we can start to investigate the differences in expression between experiments directly downstream of our protein of interest. 
+Looking at the downstream network of *Insr* (node 55682) in Cytoscape we can start to investigate the differences in expression between experiments directly downstream of our protein of interest. 
 
-
-This function can also be performed on a particular node ID. This can be any node including reaction or a complex nodes. An example of this function is as follows: 
+This function can also be performed on a particular node ID. This can be any node including "reaction" or "complex" nodes. An example of this function which retrieves the same network downstream of the insulin receptor is as follows : 
 
 ```
 java -jar jars/ReactoSitePlus.jar -m TraversalAnalysis -idb ./path/to/graph/ -op ./path/to/output/ -p 55682 -dir downstream -en Control
@@ -424,7 +427,9 @@ java -jar jars/ReactoSitePlus.jar -m TraversalAnalysis -idb ./path/to/graph/ -op
 
 ### Neighbourhood Analysis
 
-With this function we can prioritize neighbourhoods of signalling. In order to prioritize important neighbourhoods, the Empirical False Discovery rate was determined for each mapped neighbourhood. Pre-calculated distributions have been calculated for each neighbourhood of varying sizes in which you can compare your mapped data to. As explained above, qPhos is a database holding 554 different phosphoproteomic experiments accross 137 human cell lines. qPhos was sampled from used to ... ???? bootstrap ? something something.
+With this function we can prioritize neighbourhoods of signalling activity. In order to prioritise important neighbourhoods, the Empirical False Discovery rate is computed for each mapped neighbourhood. Pre-calculated distributions have been calculated for each neighbourhood of varying sizes against which you can compare your mapped data. As explained above, qPhos is a database holding 554 different phosphoproteomic experiments across 137 human cell lines.
+
+qPhos was sampled from used to ... ???? bootstrap ? something something.
 Can generate your own bkgd distributions with this func : ``` ``` be sure to use the same depth, and approximate experiment size. Also may want to use a super computer as the compute needed is very intensive (get mem stats ~32 GB). 
 
 Using the example data from earlier these are the function inputs: 
@@ -440,7 +445,9 @@ We can visualize relative statistics in R:
 
 With this function you can look for the shortest path in the network between 2 proteins of interest. 
 
-ShortestPath takes in a measured input database [-idb], an output path [-op], a starting node id [-sid], a ending node id [-eid], and the weight type to be traversed [-ew] (can be either "Abundance" (a) or "Support" (s)). This algorithm will traverse all edge types excepting edges to and from small molecules. Using the example data from earlier we can look at the shortest path between the Insr (P15208) and the Jun protein node seen in the traversal analysis screenshot (node ID 20006):
+> "ShortestPath" takes in a **mapped** input database [-idb], an output path [-op], a starting node id [-sid], a ending node id [-eid], and the weight type to be traversed [-ew] (can be either "Abundance" (a) or "Support" (s)).
+
+This algorithm will traverse all edge types with the exception of edges to and from small molecules. Using the example data from earlier we can look at the shortest path between the *Insr* (P15208) and the *Jun* protein node as seen in the traversal analysis earlier (node ID 20006):
 
 ```
 java -jar jars/ReactoSitePlus.jar -m ShortestPath -idb ./path/to/graph/ -op ./path/to/output/ -sid P15208 -eid 20006 -ew a
@@ -459,12 +466,14 @@ We can visualize in Cytoscape by loading the file "P15208_to_20006_downstream.ts
 
 ### Minimal Connection Network 
 
-With this function you can generate the network of all shortest paths between all nodes (typically reffered to as the shortest-paths network). 
+With this function you can generate the network of all shortest paths between all nodes (typically referred to as the shortest-paths network). 
 
-Continuing with the example data the function inputs call would look something like this: 
+> "MinimalConnectionNetwork" takes in a **mapped** input database [-idb], an output path [-op], the experiment name of interest [-en], and the weight type to be traversed [-ew] (can be either "Abundance" (a) or "Support" (s)).
+
+Computing shortest paths between all nodes can be intensive therefore this analysis may take a few minutes to complete. Continuing with the example data the function call would be: 
 
 ```
-java -jar jars/ReactoSitePlus.jar -m MinimalConnectionNetwork -idb ./path/to/graph/ -op ./path/to/output/ -en Control
+java -jar jars/ReactoSitePlus.jar -m MinimalConnectionNetwork -idb ./path/to/graph/ -op ./path/to/output/ -en Control -ew a
 ```
 
 The report gives general statistics about what is found in the network by looking at "MinimalConnectionNetworkReport_Control.tsv". 
@@ -474,7 +483,6 @@ The report gives general statistics about what is found in the network by lookin
 We can then visualize in Cytoscape by loading the file "MinimalConnectionNetworkReport_Control_Cytoscape.tsv"
 
 ![Screen Shot 2021-06-30 at 7 20 16 pm](https://user-images.githubusercontent.com/9949832/123936327-6a07ee00-d9d8-11eb-8292-0a1d2db1ed32.png)
-
 
 ## Creating a new integrated Database 
 
@@ -496,11 +504,14 @@ To create an embedded integrated database, first download the latest OWL files f
 
 ## Other Helpful Functions 
 #### AmountWithLabel
-This function will print the number of things in the database with that label. For example: 
+This function will print the number of things in the database with that label. For example:
+
+> "AmountWithLabel" takes in a input database [-idb], and a label type [-l].
+
 '''
 java -jar ./path/to/jars/ReactoSitePlus.jar -m AmountWithLabel -idb ./path/to/Reactome/Graph/ -l Protein
 '''
-By putting in a label that doesnt exist, this function will also throw an error showing all of the labels available for the given database. 
+By inputting a non-existent label, this function will throw an error while showing all of the labels available for the given database.
 
 #### PrintDatabase
 #### WriteAllUIDs

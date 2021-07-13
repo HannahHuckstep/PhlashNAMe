@@ -290,7 +290,7 @@ This plot depicts the distribution of the proportion of phosphorylation nodes in
 
 ### Visualization 
 #### Cytoscape
-After the database is mapped to you can write it to a Simple Interaction Format (SIF) file to import into [cytoscape](https://cytoscape.org/) along with an attribute file. The SIF file will be names SIF.sif, which can be renamed but must keep the .sif extension. An example of a SIF file looks like: 
+After the data is mapped onto the database, you can write it to a Simple Interaction Format (SIF) file and an accompanying node attributes file to import into [Cytoscape](https://cytoscape.org/). The SIF file will be named SIF.sif and can be renamed but must retain the .sif extension. An example of a SIF file is: 
 
 ```
 21	INPUT	20
@@ -299,7 +299,7 @@ After the database is mapped to you can write it to a Simple Interaction Format 
 ```
 Which we would read as the node with the id ```21``` is an ```INPUT``` to the reaction node with the id ```20```, or the node with the id ```23``` is a ```PHOSPHORYLATION``` on the node ```21```.
 
-The attribute file will contain all attributes associated with each node. An example of an attribute file looks like: 
+The attribute file will contain all attributes associated with each node. An example of an attribute file is: 
 ```
 Node_ID Database_ID Display_Name Type Database_Link Location Status Kinase Transcription_Factor Cell_Surface_Receptor UniProt_Gene_Name Integrated ABUNDANCE_SCORE_wt SUPPORT_SCORE_wt ABUNDANCE_SCORE_stim SUPPORT_SCORE_stim
 21 Protein2090 p-S568-MLXIPL Protein http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=R-HSA-163687.1 nucleoplasm   TRANSCRIPTION_FACTOR  MLXIPL  3.2 0.9 -1.5 0.5
@@ -312,7 +312,7 @@ Where the attributes are associated with the node ids found in the SIF file. The
 
 Attribute name | Description
 ---------------|-----------
-Node_ID | The unique node number used to link nodes to attributes in cytoscape
+Node_ID | The unique node number used to link nodes to attributes in Cytoscape
 Database_ID | The unique node ID given by Reactome 
 Display_Name | The name of the node 
 Type | The type of node 
@@ -324,27 +324,29 @@ Transcription_Factor | If the node is a Transcription Factor this column with ha
 Cell_Surface_Receptor | If the node is a Cell Surface Receptor this column with have the values 'CELL_SURFACE_RECEPTOR' otherwise it will be left blank. These are the lists of Cell surface receptors for [Human](https://www.uniprot.org/uniprot/?query=goa:(%22cell%20surface%20receptor%20signaling%20pathway%20involved%20in%20cell-cell%20signaling%20[1905114]%22)%20(reviewed:yes%20organism:%22Homo%20sapiens%20(Human)%20[9606]%22)&format=list) and [Mouse](https://www.uniprot.org/uniprot/?query=goa:(%22cell%20surface%20receptor%20signaling%20pathway%20involved%20in%20cell-cell%20signaling%20[1905114]%22)%20(reviewed:yes%20organism:%22Mus%20musculus%20(Mouse)%20[10090]%22)&format=list).
 UniProt_Gene_Name | The gene name associated with that UniProt ID from UniProt.
 Integrated | If the node is from PhosphoSitePlus the value will be True. 
-ABUNDANCE_SCORE_ | The abundance score mapped from the data for a node. There may be multiple Abundance scores in a single database derived from multiple experiments. Each row labelled ABUNDANCE_SCORE_ will contain the experiment name in the suffix after the last '_'. 
-SUPPORT_SCORE_ | The support score mapped from the data for a node. There may be multiple Support scores in a single database derived from multiple experiments. Each row labelled SUPPORT_SCORE_ will contain the experiment name in the suffix after the last '_'. 
+ABUNDANCE_SCORE_* | The abundance score mapped from the data for a node. There may be multiple Abundance scores in a single database derived from multiple experiments. Each row labelled ABUNDANCE_SCORE_* will contain the experiment name in the suffix in place of the *. 
+SUPPORT_SCORE_* | The support score mapped from the data for a node. There may be multiple Support scores in a single database derived from multiple experiments. Each row labelled SUPPORT_SCORE_* will contain the experiment name in the suffix in place of the *. 
 
-To write the SIF and attribute files the java command requires the input database directory and the path to the direcory you'd like the output created in. The command is as follows: 
+> "WriteDBtoSIF" , takes an input database [-idb] and an output path [-op]
+
+To write the SIF and attribute files, PhlashyNAMe requires the input database directory and the output directory path. The command is as follows: 
 ``` 
 java -jar ./path/to/jars/ReactoSitePlus.jar -m WriteDBtoSIF -idb ./path/to/graph/ -op ./path/to/output/
 ```
 
-To then load the SIF file into cytoscape, first open the cytoscape application. Next click the network button (highlighted in red in the figure below).
+The SIF file can then be loaded into Cytoscape by clicking the network button from the tool bar (highlighted in red in the figure below).
 
 ![Cytoscape Network Button](https://user-images.githubusercontent.com/9949832/120894578-81172280-c65c-11eb-9e3a-d2da0ccb2ff5.png)
 
-Next, navigate to your SIF file and open it. I do not recommend a network view is made at this point as the network is incredibly large and cytoscape often crashes while attempting to make a network view this large. Following this, click the attribute file button (highlighted in red in the figure below). 
+Next, navigate to your SIF file and open it. I **do not** recommend creating a network view at this stage as the network is quite large and may crash Cytoscape (layout computation is an intensive task). Following this, click the attribute file button from the tool bar (highlighted in red in the figure below). 
 
 ![Cytoscape Attribute Button](https://user-images.githubusercontent.com/9949832/120894665-fb47a700-c65c-11eb-8576-4179716395da.png)
 
-Navigate to your attibute file and open it. As in the figure below, make sure the Node_ID column is chosen as the key column. You can also change the value type of the attributes. One change you may like to make is to ensure the ABUNDANCE_SCORE_ and SUPPPORT_SCORE_ columns are set to numeric values. 
+Navigate to your attribute file and open it. As in the figure below, make sure the Node_ID column is chosen as the key column. You can also change the value type of the attributes. One change you may like to make is to ensure the ABUNDANCE_SCORE_ and SUPPPORT_SCORE_ columns are set to numeric values. 
 
 ![Cytoscape attributes](https://user-images.githubusercontent.com/9949832/120894779-950f5400-c65d-11eb-871a-9d3e8a0c3597.png)
 
-Now your database should be ready to be explored. You may select nodes from the node table (make sure to left click the highlighted nodes and choose 'Select nodes from selected rows') and create a newtork view using the button highlighted in the figure below. 
+Now your database should be ready to be explored. You may select multiple nodes from the node table and create a network view for the subnetwork induced by these nodes using the button highlighted in the figure below. Make sure to right click the highlighted nodes and choose 'Select nodes from selected rows' to ensure the nodes are selected.
 
 ![Cytoscape new network button](https://user-images.githubusercontent.com/9949832/120895262-8164ed00-c65f-11eb-9c49-383c636fe57f.png)
 
@@ -406,7 +408,7 @@ We can look at the resulting report titled "TraversalReport_downstream_P15208.ts
 
 We see here that this UniProt ID has multiple proteoforms attached to it. Each may be in a different cellular location or have a different profile of modifications. The there a number of statistics reported for the downstream network of each proteoform and are ordered from largest to smallest (in reference to downstream network size). The first line is the variable names that can refer to that particular proteoform, next is the number of nodes found downstream of this proteoform. This statistic includes biochemical reaction nodes, gene nodes etc., as well as nodes that are mappable (proteins and complexes). The remaining statistics are self explanitory. This traversal will traverse all edges excepting small molecule edges, so as to avoid an explosion of things downstream of a single small molecule (such as ATP). 
 
-We can look at the downstream networks in cytoscape by loading the file titled "P15208_downstream.tsv". Once this is loaded into cytoscape and attached to our already loaded measured network, we can filter the network to display the downstream networks of each proteoform. 
+We can look at the downstream networks in Cytoscape by loading the file titled "P15208_downstream.tsv". Once this is loaded into Cytoscape and attached to our already loaded measured network, we can filter the network to display the downstream networks of each proteoform. 
 
 ![Screen Shot 2021-06-29 at 1 42 07 am](https://user-images.githubusercontent.com/9949832/123665036-42e7da00-d87b-11eb-91eb-ef8cb452c1ea.png)
 
@@ -450,7 +452,7 @@ We can look at the report titled "ShortestPath_P15208_to_20006.tsv":
 
 This function will report the shortest path between the 2 nodes in every experiment currently mapped on your database. The first line determines if the end node is up- or downstream of the starting node. Next a number of statistics are given. Finally, the path is shown with each node id and the total path weight, followed by the same path but with node names and the weight of each edge beside the reaction nodes.  
 
-We can visualize in cytoscape by loading the file "P15208_to_20006_downstream.tsv	":
+We can visualize in Cytoscape by loading the file "P15208_to_20006_downstream.tsv	":
 
 ![Screen Shot 2021-06-29 at 9 26 36 pm](https://user-images.githubusercontent.com/9949832/123790331-87c64c00-d921-11eb-81e2-3e2f240a3667.png)
 
@@ -468,7 +470,7 @@ The report gives general statistics about what is found in the network by lookin
 
 ![Screen Shot 2021-06-30 at 7 14 01 pm](https://user-images.githubusercontent.com/9949832/123936119-3dec6d00-d9d8-11eb-88c1-8d0623747645.png)
 
-We can then visualize in cytoscape by loading the file "MinimalConnectionNetworkReport_Control_cytoscape.tsv"
+We can then visualize in Cytoscape by loading the file "MinimalConnectionNetworkReport_Control_Cytoscape.tsv"
 
 ![Screen Shot 2021-06-30 at 7 20 16 pm](https://user-images.githubusercontent.com/9949832/123936327-6a07ee00-d9d8-11eb-8292-0a1d2db1ed32.png)
 

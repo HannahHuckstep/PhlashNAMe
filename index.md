@@ -156,7 +156,7 @@ conda create --name PhlashyNAMe \
     provided scripts
 
 ```
-git clone https://github.com/HannahHuckstep/Db_Compare.git
+git clone https://github.com/HannahHuckstep/PhlashyNAMe.git
 ```
 
 2.  [OPTIONAL] download the most current version of Reactome and

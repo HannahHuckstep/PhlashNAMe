@@ -174,19 +174,30 @@ git clone https://github.com/HannahHuckstep/PhlashyNAMe.git
 
 PhlashyNAMe is a suite of tools that enable a network-based analysis of phosphoproteomic data. The analysis tools provided within PhlashyNAMe are (ideally in some order e.g. order of usage/frequency of usage):
 
+Database creation
+
+1. CreateDB - Description
+2. IntegratePSP - Description
+
+Data mapping onto the database
+
+1. MapPeptides - Description
+
+Network analysis
+
+1. TraversalAnalysis - Description
+2. ShortestPath - Description
+3. NeighbourhoodAnalysis - Description
+4. BinomialNeighbourhoodAnalysis - Description
+5. MinimalConnectionNetwork - Description
+
+Other accesory modules
+
 1. PrintDatabase - Description
 2. AmountWithLabel - Description
 3. WriteAllUIDs - Description
 4. WritePhos - Description
 5. WriteDBtoSIF - Description
-6. IntegratePSP - Description
-7. BinomialNeighbourhoodAnalysis - Description
-8. MapPeptides - Description
-9. CreateDB - Description
-10. NeighbourhoodAnalysis - Description
-11. ShortestPath - Description
-12. MinimalConnectionNetwork - Description
-13. TraversalAnalysis - Description
 
 ## Tool options and commands 
 To start, navigate into the repo directory and type the following command to view all of the tool options: 
@@ -390,8 +401,8 @@ Alternatively, you can do this process manually in the Neo4j desktop app as show
 
 Now that the network has the data mapped to it, there are a number of ways to analyse the mapped network. 
 * Traversal analysis - Description
-* Neighbourhood analysis  - Description
 * Find the shortest path between two proteins - Description
+* Neighbourhood analysis  - Description
 * Minimal Connection Network - Description
 * Manual investigation via Cytoscape or Neo4j - Description
 
@@ -425,22 +436,6 @@ This function can also be performed on a particular node ID. This can be any nod
 java -jar jars/ReactoSitePlus.jar -m TraversalAnalysis -idb ./path/to/graph/ -op ./path/to/output/ -p 55682 -dir downstream -en Control
 ```
 
-### Neighbourhood Analysis
-
-With this function we can prioritize neighbourhoods of signalling activity. In order to prioritise important neighbourhoods, the Empirical False Discovery rate is computed for each mapped neighbourhood. Pre-calculated distributions have been calculated for each neighbourhood of varying sizes against which you can compare your mapped data. As explained above, qPhos is a database holding 554 different phosphoproteomic experiments across 137 human cell lines.
-
-qPhos was sampled from used to ... ???? bootstrap ? something something.
-Can generate your own bkgd distributions with this func : ``` ``` be sure to use the same depth, and approximate experiment size. Also may want to use a super computer as the compute needed is very intensive (get mem stats ~32 GB). 
-
-Using the example data from earlier these are the function inputs: 
-```
-java -jar jars/ReactoSitePlus.jar -m NeighbourhoodAnalysis
-```
-
-We can look at the report:
-
-We can visualize relative statistics in R:
-
 ### Shortest Path 
 
 With this function you can look for the shortest path in the network between 2 proteins of interest. 
@@ -463,6 +458,22 @@ This function will report the shortest path between the 2 nodes in every experim
 We can visualize in Cytoscape by loading the file "P15208_to_20006_downstream.tsv	":
 
 ![Screen Shot 2021-06-29 at 9 26 36 pm](https://user-images.githubusercontent.com/9949832/123790331-87c64c00-d921-11eb-81e2-3e2f240a3667.png)
+
+### Neighbourhood Analysis
+
+With this function we can prioritize neighbourhoods of signalling activity. In order to prioritise important neighbourhoods, the Empirical False Discovery rate is computed for each mapped neighbourhood. Pre-calculated distributions have been calculated for each neighbourhood of varying sizes against which you can compare your mapped data. As explained above, qPhos is a database holding 554 different phosphoproteomic experiments across 137 human cell lines.
+
+qPhos was sampled from used to ... ???? bootstrap ? something something.
+Can generate your own bkgd distributions with this func : ``` ``` be sure to use the same depth, and approximate experiment size. Also may want to use a super computer as the compute needed is very intensive (get mem stats ~32 GB). 
+
+Using the example data from earlier these are the function inputs: 
+```
+java -jar jars/ReactoSitePlus.jar -m NeighbourhoodAnalysis
+```
+
+We can look at the report:
+
+We can visualize relative statistics in R:
 
 ### Minimal Connection Network 
 

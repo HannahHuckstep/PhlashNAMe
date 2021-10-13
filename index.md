@@ -195,10 +195,13 @@ Network analysis
 
 Other accesory modules
 
-1. PrintDatabase - This function will print all nodes in the database onto the console. 
-2. AmountWithLabel - This function will tell you how many nodes in the graph there are with a given label. If no label is provided it will print out all current labels in the database. 
-3. WriteAllUIDs - This function will print all UniProt ids in the graph to the console. 
-4. WritePhos - This function will print all phosphorylations in the database to the console. 
+1. ResetScores - This function will remove all scores for a given experiment label. 
+2. PrintDatabase - This function will print all nodes in the database onto the console. 
+3. AmountWithLabel - This function will tell you how many nodes in the graph there are with a given label. If no label is provided it will print out all current labels in the database. 
+4. WriteAllUIDs - This function will print all UniProt ids in the graph to the console. 
+5. WritePhos - This function will print all phosphorylations in the database to the console. 
+6. GetSpecies - This function will print the sprcies of a graph database. 
+7. PrintAllProperties - This function will print all properties in use of the given graph. 
 
 
 ## Tool options and commands 

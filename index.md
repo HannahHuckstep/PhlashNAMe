@@ -172,32 +172,34 @@ git clone https://github.com/HannahHuckstep/PhlashyNAMe.git
 
 ## Analysis modes
 
-PhlashyNAMe is a suite of tools that enable a network-based analysis of phosphoproteomic data. The analysis tools provided within PhlashyNAMe are (ideally in some order e.g. order of usage/frequency of usage):
+PhlashyNAMe is a suite of tools that enable a network-based analysis of phosphoproteomic data. The analysis tools provided within PhlashyNAMe are in order of usage:
 
 Database creation
 
-1. CreateDB - Description
-2. IntegratePSP - Description
+1. CreateDB - This function is used to create the neo4j graph of Reactome.
+2. IntegratePSP - This function with integrate the PhosphoSitePlus database into the Reactome graph created in the previous function.
 
 Data mapping onto the database
 
-1. MapPeptides - Description
+1. MapPeptides - This function will map a phosphopeptide dataset onto the graph created in the previous steps. 
 
 Network analysis
 
-1. TraversalAnalysis - Description
-2. ShortestPath - Description
-3. NeighbourhoodAnalysis - Description
-4. BinomialNeighbourhoodAnalysis - Description
-5. MinimalConnectionNetwork - Description
+1. TraversalAnalysis - This function performs the Traversal Analysis, which will generate a subgraph of everything up/downstream of the given UniProt IDs/nodes. A report will be generated along with a tsv file of the subgraph for cytoscape. 
+2. ShortestPath - This function will generate the shortest path between two given nodes, given such a path exists. A report is generated along with a tsv file for cytoscape. 
+3. MinimalConnectionNetwork - This function will create a subnetwork of all the shortest paths between all measured nodes of a given experiment. A report is generated along with a tsv file for cytoscape.
+4. qPhosED/mouseED - These functions will create an Empirical Null Distribution (required to run the Neighbourhood Analysis). 
+5. NeighbourhoodAnalysis - This function will ... (can be used to evaluate a sing nbhd vs all nbhds) 
+6. WriteDBtoSIF - This function will print the current graph as a SIF file (nodes and their edges) along with an attribute file (the properties belonging to each node. This function is intended to be used to allow the graph to be loaded and visualised in cytoscape. 
+
 
 Other accesory modules
 
-1. PrintDatabase - Description
-2. AmountWithLabel - Description
-3. WriteAllUIDs - Description
-4. WritePhos - Description
-5. WriteDBtoSIF - Description
+1. PrintDatabase - This function will print all nodes in the database onto the console. 
+2. AmountWithLabel - This function will tell you how many nodes in the graph there are with a given label. If no label is provided it will print out all current labels in the database. 
+3. WriteAllUIDs - This function will print all UniProt ids in the graph to the console. 
+4. WritePhos - This function will print all phosphorylations in the database to the console. 
+
 
 ## Tool options and commands 
 To start, navigate into the repo directory and type the following command to view all of the tool options: 

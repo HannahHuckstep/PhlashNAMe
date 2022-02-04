@@ -156,7 +156,7 @@ conda create --name PhlashyNAMe \
     provided scripts
 
 ```
-git clone https://github.com/HannahHuckstep/PhlashyNAMe.git
+git clone https://github.com/HannahHuckstep/maph.git
 ```
 
 2.  [OPTIONAL] download the most current version of Reactome and
@@ -209,7 +209,7 @@ Other accesory modules
 To start, navigate into the repo directory and type the following command to view all of the tool options: 
 
 ```
-java -jar jars/ReactoSitePlus.jar -h
+java -jar jars/maph.jar -h
 ```
 The first 2 arguments are named -h (or --help) to access the above again (This will be useful later). While the second named option -m (or --mode) is used to specify which function you would like to perform. the current options are listed in the '{}' and then again below in a list form. As an example, the first option is: 
 
@@ -226,10 +226,10 @@ For this option you will need to specify:
 
 Thus, the final command would look something like this: 
 ```
-java -jar ./path/to/jars/ReactoSitePlus.jar -m CreateDB -iof ./path/to/file/Reactome.owl -op ./path/to/graph/database/ -u T -s h
+java -jar ./path/to/jars/maph.jar -m CreateDB -iof ./path/to/file/Reactome.owl -op ./path/to/graph/database/ -u T -s h
 ```
 
-**All comands will start with** ```java -jar ./path/to/jars/ReactoSitePlus.jar```
+**All comands will start with** ```java -jar ./path/to/jars/maph.jar```
 
 Finally, below all the commands are all of the parameters required to run each command, and an explanation of that they are used for. e.g.,
 * --input_owl_file [INPUT_OWL_FILE], -iof [INPUT_OWL_FILE]
@@ -240,7 +240,7 @@ Finally, below all the commands are all of the parameters required to run each c
 Now we should be ready to map our data! Data can be mapped to pre-built neo4j databases located in the databases folder, or you can build your own up-to-date database as shown above (see [Creating a new integrated Database](#creating-a-new-integrated-database)). The mapping process will modify the underlying graph database by computing and integrating confidence scores and abundance scores for each proteoform. To use the pre-computed databases in the *databases* directory, you will need to first extract the tar archives. You can do so using:
 
 ```
-tar zxf databases/mouse.tar.gz
+unzip databases/mouse.zip
 ```
 
 **Note that pre-computed databases need to be re-extracted for new analyses as the mapping step modifies the graph database.**
@@ -282,7 +282,7 @@ Which needs the following parameters specified:
 To map the data you can run the following command. Note that this is an intensive step and can take a few minutes to run depending on the size of your data. You will be prompted to enter the names of the four columns required to perform the mapping.
 
 ``` 
-java -jar ./path/to/jars/ReactoSitePlus.jar -m MapPeptides -idb ./path/to/graph/database/ -op ./path/to/output/ -idf ./path/to/data.txt -as HighestSupport
+java -jar ./path/to/jars/maph.jar -m MapPeptides -idb ./path/to/graph/database/ -op ./path/to/output/ -idf ./path/to/data.txt -as HighestSupport
 ```
                          
 ![Filling out parameters](https://user-images.githubusercontent.com/9949832/123599868-6b4ee480-d839-11eb-81f3-73a37ee65293.png)
@@ -354,7 +354,7 @@ NBHD_sum_pval_* | The pvalue for the neighbourhood surrounding this node in the 
 
 To write the SIF and attribute files, PhlashyNAMe requires the input database directory and the output directory path. The command is as follows: 
 ``` 
-java -jar ./path/to/jars/ReactoSitePlus.jar -m WriteDBtoSIF -idb ./path/to/graph/ -op ./path/to/output/
+java -jar ./path/to/jars/maph.jar -m WriteDBtoSIF -idb ./path/to/graph/ -op ./path/to/output/
 ```
 
 The SIF file can then be loaded into Cytoscape by clicking the network button from the tool bar (highlighted in red in the figure below).
@@ -425,7 +425,7 @@ With this function we can look at everything downstream or upstream of a protein
 Using the example data from earlier these are the function inputs for an analysis looking downstream of the mouse insulin receptor (*Insr*)(P15208): 
 
 ```
-java -jar jars/ReactoSitePlus.jar -m TraversalAnalysis -idb ./path/to/graph/ -op ./path/to/output/ -p P15208 -dir downstream -en Control
+java -jar jars/maph.jar -m TraversalAnalysis -idb ./path/to/graph/ -op ./path/to/output/ -p P15208 -dir downstream -en Control
 ```
 
 We can look at the resulting report titled "TraversalReport_downstream_P15208.tsv":
@@ -443,7 +443,7 @@ Looking at the downstream network of *Insr* (node 55682) in Cytoscape we can sta
 This function can also be performed on a particular node ID. This can be any node including "reaction" or "complex" nodes. An example of this function which retrieves the same network downstream of the insulin receptor is as follows : 
 
 ```
-java -jar jars/ReactoSitePlus.jar -m TraversalAnalysis -idb ./path/to/graph/ -op ./path/to/output/ -p 55682 -dir downstream -en Control
+java -jar jars/maph.jar -m TraversalAnalysis -idb ./path/to/graph/ -op ./path/to/output/ -p 55682 -dir downstream -en Control
 ```
 
 ### Shortest Path 
@@ -455,7 +455,7 @@ With this function you can look for the shortest path in the network between 2 p
 This algorithm will traverse all edge types with the exception of edges to and from small molecules. Using the example data from earlier we can look at the shortest path between the *Insr* (P15208) and the *Jun* protein node as seen in the traversal analysis earlier (node ID 20006):
 
 ```
-java -jar jars/ReactoSitePlus.jar -m ShortestPath -idb ./path/to/graph/ -op ./path/to/output/ -sid P15208 -eid 20006 -ew a
+java -jar jars/maph.jar -m ShortestPath -idb ./path/to/graph/ -op ./path/to/output/ -sid P15208 -eid 20006 -ew a
 ```
 **The function will never be able to find a path between 2 UniProt ID's (or UniProt ID nodes), only between UniProt ID's and node IDs, and node IDs to node IDs** 
 
@@ -481,7 +481,7 @@ Several empirical null distributions were pre-generated in order to calculate st
 
 Using the example data from earlier these are the function inputs: 
 ```
-java -jar jars/ReactoSitePlus.jar -m NeighbourhoodAnalysis -idb ./path/to/graph/ -op ./path/to/output/ -en Control -d 4 -cdf /path/to/CumulativeDensityFile/mouse1000/
+java -jar jars/maph.jar -m NeighbourhoodAnalysis -idb ./path/to/graph/ -op ./path/to/output/ -en Control -d 4 -cdf /path/to/CumulativeDensityFile/mouse1000/
 ```
 >"NeighbourhoodAnalysis" takes in a measured input database [-idb], an output path [-op], the depth of the traversal [-d], the experiment name of interest [-en], and the directory containing the pre-calculated Cumulative Density Function (of the Empirical Null Dirtibutions) per neighbourhood [-cdf]
 
@@ -500,7 +500,7 @@ With this function you can generate the network of all shortest paths between al
 Computing shortest paths between all nodes can be intensive therefore this analysis may take a few minutes to complete. Continuing with the example data the function call would be: 
 
 ```
-java -jar jars/ReactoSitePlus.jar -m MinimalConnectionNetwork -idb ./path/to/graph/ -op ./path/to/output/ -en Control -ew a
+java -jar jars/maph.jar -m MinimalConnectionNetwork -idb ./path/to/graph/ -op ./path/to/output/ -en Control -ew a
 ```
 
 The report gives general statistics about what is found in the network by looking at "MinimalConnectionNetworkReport_Control.tsv". 
@@ -522,11 +522,11 @@ To create an embedded integrated database, first download the latest OWL files f
     * Read and agree to terms and conditions 
     * Download 'BioPAX:Kinase-substrate information' 
 4. Create the Reactome embedded database as shown above 
-    * e.g.,  ```java -jar ./path/to/jars/ReactoSitePlus.jar -m CreateDB -iof ./path/to/file/Reactome.owl -op ./path/to/graph/ -u T -s h```
+    * e.g.,  ```java -jar ./path/to/jars/maph.jar -m CreateDB -iof ./path/to/file/Reactome.owl -op ./path/to/graph/ -u T -s h```
     * Remember to specify wheather or not you'd like the database to be updated and the species 
     * This function downloads many files live from UniProt. Therefore if internet access is unstable this function may crash. You can simply re-enter the command and it will overwrite the current failed output. 
 5. Once the Reactome graph is built, you can integrate with PhosphoSitePlus with the 'IntegratePSP' mode. 
-    * e.g., ``` java -jar ./path/to/jars/ReactoSitePlus.jar -m IntegratePSP -idb ./path/to/Reactome/Graph/ -op ./path/for/integration/report/output/ -iof ./path/to/PSP.owl```
+    * e.g., ``` java -jar ./path/to/jars/maph.jar -m IntegratePSP -idb ./path/to/Reactome/Graph/ -op ./path/for/integration/report/output/ -iof ./path/to/PSP.owl```
     * **One key thing to remember is that the orgininal Reactome database that is input into this function is modified and becomes the integrated database.**
 
 ## Other Helpful Functions 
@@ -536,7 +536,7 @@ This function will print the number of things in the database with that label. F
 > "AmountWithLabel" takes in a input database [-idb], and a label type [-l].
 
 ```
-java -jar ./path/to/jars/ReactoSitePlus.jar -m AmountWithLabel -idb ./path/to/Reactome/Graph/ -l Protein
+java -jar ./path/to/jars/maph.jar -m AmountWithLabel -idb ./path/to/Reactome/Graph/ -l Protein
 ```
 By inputting a non-existent label, this function will throw an error while showing all of the labels available for the given database.
 
@@ -546,14 +546,14 @@ This function will print every single node and edge with all of its properties t
 >"PrintDatabase", takes in input database [-idb]
 
 ```
-java -jar ./path/to/jars/ReactoSitePlus.jar -m PrintDatabase -idb ./path/to/Reactome/Graph/
+java -jar ./path/to/jars/maph.jar -m PrintDatabase -idb ./path/to/Reactome/Graph/
 ```
 
 #### MapUIDs 
 This function will map a file containing a single UniProt id per line to the database (meant for lists of Proteins). It takes an input database [-idb], an output path[-op], an input data file [-idf], and a name to be assigned to the mapping [-mn]. This mapped data can then be used for any of the above functions. **Please note, if performing a neighbourhood analysis with proteomics data the Average Support Score and Sum of Support Score categories will not be valid, if you'd like to use these categories please map data with the MapPeptides function (which will take non-phosphorylated peptides)**
 
 ```
-java -jar ./path/to/jars/ReactoSitePlus.jar -m MapUIDs -idb ./path/to/Reactome/Graph/ -op ./path/to/output/ -idf ./path/to/data.txt -mn ProteinList
+java -jar ./path/to/jars/maph.jar -m MapUIDs -idb ./path/to/Reactome/Graph/ -op ./path/to/output/ -idf ./path/to/data.txt -mn ProteinList
 ```
 
 #### pSiteAnnotation 
@@ -565,7 +565,7 @@ This function will take a MaxQuant Evidence file and will annotate the phosporyl
 e.g. will turn these "Q3UGC7", "\_(ac)AAAAAAAAAAGDS(ph)DSWDADTFSMEDPVR\_", "Eif3j1" into "Eif3j1_pS_14"
 
 ```
-java -jar ./path/to/jars/ReactoSitePlus.jar -m pSiteAnnotation -op ./path/to/output/ -idf ./path/to/data.txt
+java -jar ./path/to/jars/maph.jar -m pSiteAnnotation -op ./path/to/output/ -idf ./path/to/data.txt
 ```
 
 #### WriteAllUIDs

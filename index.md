@@ -466,19 +466,23 @@ We can visualize in Cytoscape by loading the file "P15208_to_20006_downstream.ts
 
 ### Neighbourhood Analysis
 
-With this function we can prioritize neighbourhoods of signalling activity. In order to prioritise important neighbourhoods, the Empirical False Discovery rate is computed for each mapped neighbourhood. Pre-calculated distributions have been calculated for each neighbourhood of varying sizes against which you can compare your mapped data. As explained above, qPhos is a database holding 554 different phosphoproteomic experiments across 137 human cell lines.
+The neighbourhood analysis aims to highlight proteins and/or complexes that may not necessarily have been measured in the experiment itself but is surrounded by proteins and complexes that have been measured, making it a node of interest. To accomplish this, first an experiment must be mapped to the network, next a neighbourhood is generated around every protein and complex in the network. The number of direct neighbours to be traversed (and included in the neighbourhood) can be set by the user (henceforth referred to as the neighbourhood size), *Howveer, currently the only neighbourhood size available is 4*. Certain edges are not traversed such as edges leaving small molecules (such as ATP (adenosine triphosphate), which is involved in hundreds of reactions) as well as component edges (which point to all the subcomponents of a complex) to avoid irrelevant reactions being included in the neighbourhood. Once a neighbourhood is generated, four measurements are taken. The first is the number of entities in the neighbourhood that have a received a mapping from the data, second is the number of UniProt ids in the neighbourhood that have received a mapping from the data. Third is the average support score (explained in detail in the manuscript in Chapter 3) per neighbourhood and finally, the fourth measurement is the sum of support scores per neighbourhood.
 
-qPhos was sampled from used to ... ???? bootstrap ? something something.
-Can generate your own bkgd distributions with this func : ``` ``` be sure to use the same depth, and approximate experiment size. Also may want to use a super computer as the compute needed is very intensive (get mem stats ~32 GB). 
+Pre-calculated distributions have been calculated for each neighbourhood of varying experimental sizes against which you can compare your mapped data. As explained above, qPhos is a database holding 137 different phosphoproteomic experiments across 554 different human experimental conditions, while a database of mouse phosphoproteomics was developed in-house containing 33 experiments accross 680 different mouse experimental conditions. 
+
+Several empirical null distributions were pre-generated in order to calculate statistical significance of each neighbourhood in each of the four categories outined above. These distributions were generated for each species over a range of experiment sizes (1000 unique UniProt ids, 2000 unique UniProt ids, and 6000 unique UniProt ids), allowing the user to pick the distribution closest to their experiment size when performing the neighbourhood analysis. (You can see the number of unique UniProt ids that mapped from your data in the mapping report generated when data is initally mapped to guide you choice in distribution size) 
 
 Using the example data from earlier these are the function inputs: 
 ```
-java -jar jars/ReactoSitePlus.jar -m NeighbourhoodAnalysis
+java -jar jars/ReactoSitePlus.jar -m NeighbourhoodAnalysis -idb ./path/to/graph/ -op ./path/to/output/ -en Control -d 4 -cdf /path/to/CumulativeDensityFile/mouse1000/
 ```
+>"NeighbourhoodAnalysis" takes in a measured input database [-idb], an output path [-op], the depth of the traversal [-d], the experiment name of interest [-en], and the directory containing the pre-calculated Cumulative Density Function (of the Empirical Null Dirtibutions) per neighbourhood [-cdf]
 
-We can look at the report:
+We can look at the printed stats:
 
-We can visualize relative statistics in R:
+We can also look at the function output: 
+
+We can visualize relative statistics in cytoscape:
 
 ### Minimal Connection Network 
 
@@ -530,10 +534,37 @@ java -jar ./path/to/jars/ReactoSitePlus.jar -m AmountWithLabel -idb ./path/to/Re
 By inputting a non-existent label, this function will throw an error while showing all of the labels available for the given database.
 
 #### PrintDatabase
+This function will print every single node and edge with all of its properties to the console. 
+
+>"PrintDatabase", takes in input database [-idb]
+
+'''
+java -jar ./path/to/jars/ReactoSitePlus.jar -m PrintDatabase -idb ./path/to/Reactome/Graph/
+'''
+
+#### MapUIDs 
+This function will map a file containing a single UniProt id per line to the database (meant for lists of Proteins). It takes an input database [-idb], an output path[-op], an input data file [-idf], and a name to be assigned to the mapping [-mn]. This mapped data can then be used for any of the above functions. **Please note, if performing a neighbourhood analysis with proteomics data the Average Support Score and Sum of Support Score categories will not be valid, if you'd like to use these categories please map data with the MapPeptides function (which will take non-phosphorylated peptides)**
+
+'''
+java -jar ./path/to/jars/ReactoSitePlus.jar -m MapUIDs -idb ./path/to/Reactome/Graph/ -op ./path/to/output/ -idf ./path/to/data.txt -mn ProteinList
+'''
+
+#### pSiteAnnotation 
+This function will take a MaxQuant Evidence file and will annotate the phosporylation sites found on each protein onto their respective gene name and add it on as a column to the end of the evidence file.
+
+This function will take an output path and an input file but require you to prvide the column names containing the UniProt ids, the modified peptides and the gene names. 
+
+e.g. will turn these "Q3UGC7", "\_(ac)AAAAAAAAAAGDS(ph)DSWDADTFSMEDPVR\_", "Eif3j1" into "Eif3j1_pS_14"
+
+'''
+java -jar ./path/to/jars/ReactoSitePlus.jar -m pSiteAnnotation -op ./path/to/output/ -idf ./path/to/data.txt
+'''
+
 #### WriteAllUIDs
 #### WritePhos
 #### GetSpecies
 #### ResetScores
 #### PrintAllProperties
-#### qPhosED
+
+
 

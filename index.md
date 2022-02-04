@@ -344,6 +344,10 @@ UniProt_Gene_Name | The gene name associated with that UniProt ID from UniProt.
 Integrated | If the node is from PhosphoSitePlus the value will be True. 
 ABUNDANCE_SCORE_* | The abundance score mapped from the data for a node. There may be multiple Abundance scores in a single database derived from multiple experiments. Each row labelled ABUNDANCE_SCORE_* will contain the experiment name in the suffix in place of the *. 
 SUPPORT_SCORE_* | The support score mapped from the data for a node. There may be multiple Support scores in a single database derived from multiple experiments. Each row labelled SUPPORT_SCORE_* will contain the experiment name in the suffix in place of the *. 
+NBHD_entity_measured_pval_* | The pvalue for the neighbourhood surrounding this node in the "Number of entities measured per neighbourhood" category.
+NBHD_uids_measured_pval_* | The pvalue for the neighbourhood surrounding this node in the "Number of UniProt ids measured per neighbourhood" category.
+NBHD_avg_pval_* | The pvalue for the neighbourhood surrounding this node in the "Average support score per neighbourhood" category.
+NBHD_sum_pval_* | The pvalue for the neighbourhood surrounding this node in the "Sum of support scores per neighbourhood" category.
 
 > "WriteDBtoSIF" , takes an input database [-idb] and an output path [-op]
 

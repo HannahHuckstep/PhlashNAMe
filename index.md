@@ -181,16 +181,15 @@ Database creation
 
 Data mapping onto the database
 
-1. MapPeptides - This function will map a phosphopeptide dataset onto the graph created in the previous steps. 
+1. MapPeptides - This function will map a phosphopeptide dataset onto the graph created in the previous steps. (can also be used for proteomics datasets)
 
 Network analysis
 
 1. TraversalAnalysis - This function performs the Traversal Analysis, which will generate a subgraph of everything up/downstream of the given UniProt IDs/nodes. A report will be generated along with a tsv file of the subgraph for cytoscape. 
 2. ShortestPath - This function will generate the shortest path between two given nodes, given such a path exists. A report is generated along with a tsv file for cytoscape. 
 3. MinimalConnectionNetwork - This function will create a subnetwork of all the shortest paths between all measured nodes of a given experiment. A report is generated along with a tsv file for cytoscape.
-4. qPhosED/mouseED - These functions will create an Empirical Null Distribution (required to run the Neighbourhood Analysis). 
-5. NeighbourhoodAnalysis - This function will ... (can be used to evaluate a sing nbhd vs all nbhds) 
-6. WriteDBtoSIF - This function will print the current graph as a SIF file (nodes and their edges) along with an attribute file (the properties belonging to each node. This function is intended to be used to allow the graph to be loaded and visualised in cytoscape. 
+4. NeighbourhoodAnalysis - This function will highlight proteins and/or complexes that may not necessarily have been measured in the experiment itself but is surrounded by proteins and complexes that have been measured.
+5. WriteDBtoSIF - This function will print the current graph as a SIF file (nodes and their edges) along with an attribute file (the properties belonging to each node. This function is intended to be used to allow the graph to be loaded and visualised in cytoscape. 
 
 
 Other accesory modules
@@ -202,6 +201,8 @@ Other accesory modules
 5. WritePhos - This function will print all phosphorylations in the database to the console. 
 6. GetSpecies - This function will print the sprcies of a graph database. 
 7. PrintAllProperties - This function will print all properties in use of the given graph. 
+8. MapUIDs - This function will map a list of UniProt ids onto the database. 
+9. pSiteAnnotation - This fucntion will annotate phosphorylation sites on Gene Names.
 
 
 ## Tool options and commands 

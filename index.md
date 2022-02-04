@@ -528,9 +528,9 @@ This function will print the number of things in the database with that label. F
 
 > "AmountWithLabel" takes in a input database [-idb], and a label type [-l].
 
-'''
+```
 java -jar ./path/to/jars/ReactoSitePlus.jar -m AmountWithLabel -idb ./path/to/Reactome/Graph/ -l Protein
-'''
+```
 By inputting a non-existent label, this function will throw an error while showing all of the labels available for the given database.
 
 #### PrintDatabase
@@ -538,27 +538,28 @@ This function will print every single node and edge with all of its properties t
 
 >"PrintDatabase", takes in input database [-idb]
 
-'''
+```
 java -jar ./path/to/jars/ReactoSitePlus.jar -m PrintDatabase -idb ./path/to/Reactome/Graph/
-'''
+```
 
 #### MapUIDs 
 This function will map a file containing a single UniProt id per line to the database (meant for lists of Proteins). It takes an input database [-idb], an output path[-op], an input data file [-idf], and a name to be assigned to the mapping [-mn]. This mapped data can then be used for any of the above functions. **Please note, if performing a neighbourhood analysis with proteomics data the Average Support Score and Sum of Support Score categories will not be valid, if you'd like to use these categories please map data with the MapPeptides function (which will take non-phosphorylated peptides)**
 
-'''
+```
 java -jar ./path/to/jars/ReactoSitePlus.jar -m MapUIDs -idb ./path/to/Reactome/Graph/ -op ./path/to/output/ -idf ./path/to/data.txt -mn ProteinList
-'''
+```
 
 #### pSiteAnnotation 
 This function will take a MaxQuant Evidence file and will annotate the phosporylation sites found on each protein onto their respective gene name and add it on as a column to the end of the evidence file.
 
-This function will take an output path and an input file but require you to prvide the column names containing the UniProt ids, the modified peptides and the gene names. 
+>"pSiteAnnotation", takes an output path [-op] and an input data file [idf]"
+
 
 e.g. will turn these "Q3UGC7", "\_(ac)AAAAAAAAAAGDS(ph)DSWDADTFSMEDPVR\_", "Eif3j1" into "Eif3j1_pS_14"
 
-'''
+```
 java -jar ./path/to/jars/ReactoSitePlus.jar -m pSiteAnnotation -op ./path/to/output/ -idf ./path/to/data.txt
-'''
+```
 
 #### WriteAllUIDs
 #### WritePhos

@@ -477,6 +477,8 @@ Pre-calculated distributions have been calculated for each neighbourhood of vary
 
 Several empirical null distributions were pre-generated in order to calculate statistical significance of each neighbourhood in each of the four categories outined above. These distributions were generated for each species over a range of experiment sizes (1000 unique UniProt ids, 2000 unique UniProt ids, and 6000 unique UniProt ids), allowing the user to pick the distribution closest to their experiment size when performing the neighbourhood analysis. (You can see the number of unique UniProt ids that mapped from your data in the mapping report generated when data is initally mapped to guide you choice in distribution size) 
 
+**This function cannot be used with new user-generated databases due to the pre-generated distributions being generated based on node ids unique to the provided databases (found in the /databases folder in this git page) If you would like to generate an Empirical Null distribution specific for your database and dataset size please contact me (Hannah Huckstep) directly.** 
+
 Using the example data from earlier these are the function inputs: 
 ```
 java -jar jars/ReactoSitePlus.jar -m NeighbourhoodAnalysis -idb ./path/to/graph/ -op ./path/to/output/ -en Control -d 4 -cdf /path/to/CumulativeDensityFile/mouse1000/
